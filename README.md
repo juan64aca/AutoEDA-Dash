@@ -53,7 +53,6 @@ AutoEDA-Dash is a Plotly Dash application that performs automated Exploratory Da
 
 3. **Upload your dataset:**
    Use the file upload feature in the dashboard to load your dataset. The application will automatically perform EDA and display the results.
-r the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ## Contact
 
