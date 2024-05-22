@@ -30,7 +30,12 @@ font = "'Open Sans', sans-serif"
 style_output = {'border': '1px solid gray', 'color': 'black', 'background': 'lightgray', 'border-radius': '2px',
                 'margin': '5px', 'paddingLeft': '10px'}
 
-falta_cargar = html.H1('Cargue un archivo primero.', style=style_falta_cargar)
+falta_cargar = html.Div([
+    html.H1('Cargue un archivo primero.', style=style_falta_cargar),
+    html.Center(
+        html.Img(src='assets/eda.png')
+    )
+])
 
 # Layout of the app
 app.layout = html.Div(
