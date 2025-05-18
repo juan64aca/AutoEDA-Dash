@@ -30,14 +30,14 @@ app.config.suppress_callback_exceptions = True
 # Styles
 style_tab = {'background-color': 'darkslategray', 'color': 'white', 'border': '1px solid #ccc', 'border-radius': '5px'}
 style_tab_selected = {'font-weight': 'bold'}
-style_missing_load = {'background-color': '#ffe4e1', 'padding': '20px', 'border': '1px solid #ff69b4',
+style_falta_cargar = {'background-color': '#ffe4e1', 'padding': '20px', 'border': '1px solid #ff69b4',
                       'border-radius': '5px', 'text-align': 'center', 'margin': '20px auto', 'width': '50%'}
 font = "'Open Sans', sans-serif"
 style_output = {'border': '1px solid gray', 'color': 'black', 'background': 'lightgray', 'border-radius': '2px',
                 'margin': '5px', 'paddingLeft': '10px'}
 
-missing_load = html.Div([
-    html.H1('Load a file first.', style=style_missing_load),
+falta_cargar = html.Div([
+    html.H1('Cargue un archivo primero.', style=style_falta_cargar),
     html.Center(
         html.Img(src='assets/eda.png')
     )
@@ -69,60 +69,60 @@ app.layout = html.Div(
         dcc.Tabs(
             id='tabs',
             children=[
-                # Data summary
+                # Resumen de datos
                 dcc.Tab(
-                    id='summary-tab',
-                    label='Data Summary',
-                    children=[missing_load],
+                    id='resumen-tab',
+                    label='Resumen de datos',
+                    children=[falta_cargar],
                     style=style_tab,
                     selected_style=style_tab_selected
                 ),
-                # Data analysis
+                # Analisis de datos
                 dcc.Tab(
-                    label='Data Analysis',
+                    label='Análisis de datos',
                     children=[
-                        html.Div(id='analysis-variable', children=[missing_load]),
-                        html.Div(id='analysis-dropdown-container'),
-                        html.Div(id='analysis-structure'),
-                        html.Div(id='analysis-structure-cont'),
-                        html.Div(id='analysis-summary'),
-                        html.Div(id='analysis-summary-cont'),
-                        html.Div(id='analysis-detail'),
-                        html.Div(id='analysis-detail-cont')
+                        html.Div(id='analisis-variable', children=[falta_cargar]),
+                        html.Div(id='analisis-dropdown-container'),
+                        html.Div(id='analisis-estructura'),
+                        html.Div(id='analisis-estructura-cont'),
+                        html.Div(id='analisis-resumen'),
+                        html.Div(id='analisis-resumen-cont'),
+                        html.Div(id='analisis-detalle'),
+                        html.Div(id='analisis-detalle-cont')
                     ],
                     style=style_tab,
                     selected_style=style_tab_selected
                 ),
-                # Important plots
+                # Graficos importantes
                 dcc.Tab(
-                    id='plots-tab',
-                    label='Important Plots',
-                    children=[missing_load],
+                    id='graficos-tab',
+                    label='Gráficos importantes',
+                    children=[falta_cargar],
                     style=style_tab,
                     selected_style=style_tab_selected
                 ),
-                # Statistics
+                # Medidas estadisticas
                 dcc.Tab(
-                    id='stats-tab',
-                    label='Statistics',
-                    children=[missing_load],
+                    id='medidas-tab',
+                    label='Medidas Estadísticas',
+                    children=[falta_cargar],
                     style=style_tab,
                     selected_style=style_tab_selected
                 ),
-                # Correlation Matrix
+                # Matriz de correlacion
                 dcc.Tab(
                     id='corr-tab',
-                    label='Correlation Matrix',
-                    children=[missing_load],
+                    label='Matriz de Correlación',
+                    children=[falta_cargar],
                     style=style_tab,
                     selected_style=style_tab_selected
                 ),
-                # Regression
+                # Regresion
                 dcc.Tab(
                     id='reg-tab',
-                    label='Regression',
+                    label='Análisis de regresión',
                     children=[
-                        html.Div(id='regression-tab', children=[missing_load])
+                        html.Div(id='regresion-tab', children=[falta_cargar])
                     ],
                     style=style_tab,
                     selected_style=style_tab_selected
@@ -164,7 +164,7 @@ def read_file(contents, filename):
 
 
 @app.callback(
-    Output('summary-tab', 'children'),
+    Output('resumen-tab', 'children'),
     Input('store', 'data'),
     prevent_initial_call=True)
 def create_resumen(data):
@@ -234,8 +234,8 @@ def create_resumen(data):
 
 
 @app.callback(
-    [Output('analysis-variable', 'children'),
-     Output('analysis-dropdown-container', 'children')],
+    [Output('analisis-variable', 'children'),
+     Output('analisis-dropdown-container', 'children')],
     Input('store', 'data'),
     prevent_initial_call=True)
 def create_dropdown_analisis(data):
@@ -257,12 +257,12 @@ def create_dropdown_analisis(data):
 
 
 @app.callback(
-    [Output('analysis-structure', 'children'),
-     Output('analysis-structure-cont', 'children'),
-     Output('analysis-summary', 'children'),
-     Output('analysis-summary-cont', 'children'),
-     Output('analysis-detail', 'children'),
-     Output('analysis-detail-cont', 'children')],
+    [Output('analisis-estructura', 'children'),
+     Output('analisis-estructura-cont', 'children'),
+     Output('analisis-resumen', 'children'),
+     Output('analisis-resumen-cont', 'children'),
+     Output('analisis-detalle', 'children'),
+     Output('analisis-detalle-cont', 'children')],
     [Input('store', 'data'),
      Input('analisis-dropdown', 'value')],
     prevent_initial_call=True
@@ -301,17 +301,17 @@ def update_analysis(data, selected_column):
 
 
 @app.callback(
-    Output('plots-tab', 'children'),
+    Output('graficos-tab', 'children'),
     Input('store', 'data'),
     prevent_initial_call=True)
-def create_tab_plots(data):
+def create_tab_graficos(data):
     if data is None:
         raise PreventUpdate
 
     num_vars = data.select_dtypes(include=['number']).columns.tolist()
     non_num_vars = data.select_dtypes(exclude=['number']).columns.tolist()
 
-    plots_component = html.Div([
+    graficos_component = html.Div([
         html.H4(html.Strong('Gráficos:')),
         html.P(
             "En esta pestaña se generan gráficos para explorar las variables numéricas y no numéricas del conjunto de datos."),
@@ -319,7 +319,7 @@ def create_tab_plots(data):
             # Variables numericas
             dcc.Tab(label='Variables numéricas', children=[
                 dcc.Dropdown(
-                    id='plots-dropdown-numericas',
+                    id='graficos-dropdown-numericas',
                     options=[{'label': col, 'value': col} for col in num_vars],
                     value=num_vars[0]
                 ),
@@ -330,7 +330,7 @@ def create_tab_plots(data):
             ]),
             dcc.Tab(label='Variables no numéricas', children=[
                 dcc.Dropdown(
-                    id='plots-dropdown-no-numericas',
+                    id='graficos-dropdown-no-numericas',
                     options=[{'label': col, 'value': col} for col in non_num_vars],
                     value=non_num_vars[0]
                 ),
@@ -342,13 +342,13 @@ def create_tab_plots(data):
         ])
     ])
 
-    return plots_component
+    return graficos_component
 
 
 @app.callback(
     Output('num-graph', 'children'),
     [Input('store', 'data'),
-     Input('plots-dropdown-numericas', 'value')]
+     Input('graficos-dropdown-numericas', 'value')]
 )
 def update_num_graph(data, selected_column):
     if data is None:
@@ -372,7 +372,7 @@ def update_num_graph(data, selected_column):
 @app.callback(
     Output('non-num-graph', 'children'),
     [Input('store', 'data'),
-     Input('plots-dropdown-no-numericas', 'value')]
+     Input('graficos-dropdown-no-numericas', 'value')]
 )
 def update_non_num_graph(data, selected_column):
     if data is None:
@@ -397,17 +397,17 @@ def update_non_num_graph(data, selected_column):
 
 
 @app.callback(
-    Output('stats-tab', 'children'),
+    Output('medidas-tab', 'children'),
     Input('store', 'data'),
     prevent_initial_call=True)
-def create_tab_stats(data):
+def create_tab_medidas(data):
     if data is None:
         raise PreventUpdate
 
     num_vars = data.select_dtypes(include=['number']).columns.tolist()
 
     component = html.Div([
-        html.H4(html.Strong('Statistics')),
+        html.H4(html.Strong('Medidas Estadísticas')),
         html.P(
             "En esta pestaña se calculan y muestran diferentes medidas estádisticas de las variables númericas."),
         dcc.Tabs(children=[
@@ -626,10 +626,10 @@ def create_tab_correlacion(data):
 
 
 @app.callback(
-    Output('regression-tab', 'children'),
+    Output('regresion-tab', 'children'),
     Input('store', 'data'),
     prevent_initial_call=True)
-def create_dropdown_regression(data):
+def create_dropdown_regresion(data):
     if data is None:
         raise PreventUpdate
 
@@ -641,14 +641,14 @@ def create_dropdown_regression(data):
     desc_component = html.P("Seleccione las variables numéricas para el análisis de regresión.")
 
     dropdown_x = dcc.Dropdown(
-        id='regression-dropdown-x',
+        id='regresion-dropdown-x',
         options=[{'label': col, 'value': col} for col in num_vars],
         value=columna,
         style={'width': '50%'}
     )
 
     dropdown_y = dcc.Dropdown(
-        id='regression-dropdown-y',
+        id='regresion-dropdown-y',
         options=[{'label': col, 'value': col} for col in num_vars],
         value=columna,
         style={'width': '50%'}
@@ -664,17 +664,17 @@ def create_dropdown_regression(data):
             ],
             style={'display': 'flex'}
         ),
-        html.Div(id="regression")
+        html.Div(id="regresion")
     ])
 
     return component
 
 
 @app.callback(
-    Output('regression', 'children'),
+    Output('regresion', 'children'),
     [Input('store', 'data'),
-     Input('regression-dropdown-x', 'value'),
-     Input('regression-dropdown-y', 'value')]
+     Input('regresion-dropdown-x', 'value'),
+     Input('regresion-dropdown-y', 'value')]
 )
 def update_num_graph(data, selected_column_x, selected_column_y):
     if data is None:
